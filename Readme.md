@@ -3,7 +3,7 @@
  All of dendriform data structures in the library has no allocater.<br>
  So, you must provide memory space by yourself/yourselves to use the dendriform data structures.<br>
  The library is written by C++ language, C language users can't use the library.<br>
- However, if you want to use the library by C language, you can make C interfaces by yourself.<br>
+ However, if you want to use the library by C language, you can make C language interfaces by yourself.<br>
 ## Contribution
  If you have some good advice, please send me a issues to tell me.
 
