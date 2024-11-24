@@ -1,8 +1,8 @@
 add_rules("mode.debug", "mode.release")
-
+set_languages("c++26")
 target("libtrees")
     set_kind("binary")
-    add_files("src/*.cpp")
+    add_files("test/*.cpp")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
