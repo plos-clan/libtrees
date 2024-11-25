@@ -2,9 +2,9 @@
 #include <cstdint>
 #include <utility>
 namespace libtrees {
-template < typename T, typename Keyofvalue >
+template <  typename Keyofvalue, typename T >
 class RedBlackTree {
-public:
+private:
     // 红黑树节点的定义
 
     class RBTreeNode {
@@ -33,11 +33,13 @@ public:
         T         *_data;     // 节点的值域
     };
     using Node = RBTreeNode;
-
+public:
     // 红黑树迭代器：
-    template < typename _T, typename Ref, typename Ptr >
+
     struct RBTreeIterator {
-        using self = RBTreeIterator< T, Ref, Ptr >;
+        using Ptr = T *;
+        using Ref = T &;
+        using self = RBTreeIterator;
         // 构造函数就将红黑树的节点指针传入进来：
         RBTreeIterator( Node *node = nullptr ) :
             _pnode { node } {
@@ -123,19 +125,19 @@ private:
     Node start_node;
 
 public:
-    using iterator       = RBTreeIterator< T, T &, T       *>;
-    using const_iterator = const RBTreeIterator< T, T &, T * >;
-    iterator end( ) {
-        return iterator( _head );
+    using Iterator       = RBTreeIterator;
+    using Const_iterator = const RBTreeIterator;
+    Iterator end( ) {
+        return Iterator( _head );
     }
-    iterator begin( ) {
-        return iterator( _head->_left );
+    Iterator begin( ) {
+        return Iterator( _head->_left );
     }
-    const_iterator end( ) const {
-        return const_iterator( _head );
+    Const_iterator end( ) const {
+        return Const_iterator( _head );
     }
-    const_iterator begin( ) const {
-        return const_iterator( _head->_left );
+    Const_iterator begin( ) const {
+        return Const_iterator( _head->_left );
     }
 
 public:
@@ -152,11 +154,10 @@ public:
         this->init( );
     }
 
-    auto insert( Node &_node )     // 插入节点
+    auto insert(  Keyofvalue&& key, T&& data )     // 插入节点
     {
-        auto node = &_node;
         // 先按照二叉搜索树的方式插入
-
+        Node *node = new Node {key, data};
         auto *&_root = this->get_root( );
 
         if ( !_root ) {     // 为空树
@@ -251,10 +252,10 @@ public:
         return true;
     }
 
-    void destroy( Node *&root ) {
+    static auto destroy( Node *&root ) -> void{
         if ( root ) {
-            this->destroy( root->_left );
-            this->destroy( root->_right );
+            destroy( root->_left );
+            destroy( root->_right );
             root = nullptr;
         }
     }
@@ -281,9 +282,6 @@ public:
         }
         return nullptr;
     }
-    auto swap( RedBlackTree< T, Keyofvalue > _t ) {
-        std::swap( _head, _t._head );
-    }
 
     auto size( ) const {
         return _size;
@@ -292,11 +290,10 @@ public:
         return !_size;
     }
 
-    auto inoder( ) {
-        auto *_root = this->get_root( );
-        this->mid( _root );
+private:
+    auto swap( RedBlackTree< T, Keyofvalue > _t ) {
+        std::swap( _head, _t._head );
     }
-
     auto is_RBtree( ) {
         auto *root = this->get_root( );
         if ( !root ) {
@@ -336,8 +333,11 @@ public:
         }
         return this->is_RBtree( black_count, k, root->_left ) && this->is_RBtree( black_count, k, root->_right );
     }
-
-private:
+ 
+    auto inoder( ) {
+        auto *_root = this->get_root( );
+        this->mid( _root );
+    }
     // 中序遍历：
     auto mid( Node *root ) {
         if ( root ) {

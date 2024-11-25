@@ -1,5 +1,6 @@
 add_rules("mode.debug", "mode.release")
 set_languages("c++26")
+set_optimize("faster")
 target("libtrees")
     set_kind("binary")
     add_files("test/*.cpp")

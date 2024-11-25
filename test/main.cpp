@@ -1,15 +1,25 @@
 #include "../include/rbtree.hpp"
 #include <print>
 #include <ranges>
+#pragma once
+#include <cstdio>
+
+#include <chrono>
 auto main( void ) -> int {
     using namespace libtrees;
-    RedBlackTree< int, int > a { };
-    for ( auto i : std::views::iota( 1, 100 ) ) {
-        a.insert( *new RedBlackTree< int, int >::RBTreeNode( i, new int( i ) ) );
+    RedBlackTree< int, int > a { }; 
+
+
+    std::chrono::high_resolution_clock s;
+    auto now = s.now();
+    for ( auto i : std::views::iota( 1, 100000 ) ) {
+        a.insert( new RedBlackTree< int, int >::RBTreeNode( i, nullptr ) );
     }
-    std::println( "{}", *a.search( 3 )->_data );
-    std::println( "{}", *a.search( 4 )->_data );
-    for ( auto &it : a ) {
-        std::println( "{}", (int)it );
-    }
+    auto than = s.now( );
+    std::println( "{}", than - now );
+ 
+    
+    // for ( auto &it : a ) {
+    //     std::println( "{}", (int)it );
+    // }
 }
